@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Foodies</string>
+
+    <string-array name="RailwayStations">
+        <item>Tap here</item>
+        <item>Churchgate</item>
+        <item>Bombay Central</item>
+        <item>Dadar</item>
+        <item>Bandra</item>
+        <item>Andheri</item>
+        <item>Goregoan</item>
+        <item>Kandivali</item>
+        <item>Boriwali</item>
+        <item>Bhaynder</item>
+        <item>Vasai Road</item>
+        <item>Virar</item>
+    </string-array>
+</resources>

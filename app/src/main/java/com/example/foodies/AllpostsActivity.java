@@ -5,22 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class AllpostsActivity extends AppCompatActivity {
@@ -29,7 +24,7 @@ public class AllpostsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private String currentUserID;
     private RecyclerView SearchResultList;
-    private DatabaseReference UsersRef,PostsRef;
+    private DatabaseReference UsersRef,PostsRef,NewPostsRef;
     private TextView stationname;
 
 
@@ -42,6 +37,7 @@ public class AllpostsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         UsersRef= FirebaseDatabase.getInstance().getReference().child("Users");
         PostsRef=FirebaseDatabase.getInstance().getReference().child("Posts");
+
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
@@ -53,6 +49,7 @@ public class AllpostsActivity extends AppCompatActivity {
         SearchResultList = (RecyclerView) findViewById(R.id.staionsPostsList);
         SearchResultList.setHasFixedSize(true);
         SearchResultList.setLayoutManager(new LinearLayoutManager(this));
+        NewPostsRef=FirebaseDatabase.getInstance().getReference().child("Posts").child(stName);
 
         StaionPosts(stName);
 
@@ -70,7 +67,7 @@ public class AllpostsActivity extends AppCompatActivity {
                         SortPosts.class,
                         R.layout.statons_layout,
                         SearchByCategoryViewHolder.class,
-                        posts
+                        NewPostsRef
                 ){
             @Override
             protected void populateViewHolder(SearchByCategoryViewHolder viewHolder, SortPosts model, int position) {

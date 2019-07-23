@@ -52,7 +52,7 @@ public class PostActivity extends AppCompatActivity {
     private Spinner railway_station;
     private ImageView postbackbtn;
     private long countPosts = 0;
-    private DatabaseReference UsersRef, PostsRef;
+    private DatabaseReference UsersRef, PostsRef,NewPostRef;
     private StorageReference PostsImagesRefrence;
     public  long time;
     public String finalTime;
@@ -148,7 +148,17 @@ public class PostActivity extends AppCompatActivity {
 
     private void saveImagetoFirebase() {
 
-        final StorageReference filePath = PostsImagesRefrence.child("Post Images").child(current_user_id + ".jpg");
+
+        Calendar calFordDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        saveCurrentDate = currentDate.format(calFordDate.getTime());
+
+        Calendar calFordTime = Calendar.getInstance();
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+        saveCurrentTime = currentTime.format(calFordTime.getTime());
+
+        postRandomName = saveCurrentDate + saveCurrentTime;
+        final StorageReference filePath = PostsImagesRefrence.child("Post Images").child(current_user_id + postRandomName + ".jpg");
         filePath.putFile(ImageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -217,23 +227,7 @@ public class PostActivity extends AppCompatActivity {
         }
         else if(ImageUri == null)
         {
-            downloadUrl = "NoImage";
-
-            loadingBar.setTitle("Add New Post");
-            loadingBar.setMessage("Please wait, while we are updating your new post...");
-            loadingBar.show();
-            loadingBar.setCanceledOnTouchOutside(true);
-            Calendar calFordDate = Calendar.getInstance();
-            SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
-            saveCurrentDate = currentDate.format(calFordDate.getTime());
-
-            Calendar calFordTime = Calendar.getInstance();
-            SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
-            saveCurrentTime = currentTime.format(calFordTime.getTime());
-
-            postRandomName = saveCurrentDate + saveCurrentTime;
-
-            SavingPostInformationToDatabase();
+            Toast.makeText(this, "Please Select Photo to upload", Toast.LENGTH_SHORT).show();
         }
 
         else
@@ -280,12 +274,12 @@ public class PostActivity extends AppCompatActivity {
                         postsMap.put("description", Description);
                         postsMap.put("profileimage", userProfileImage);
                         postsMap.put("fullname", userFullName);
-                        postsMap.put("station", selected_category);
+                     //   postsMap.put("station", selected_category);
                         postsMap.put("counter", finalTime);
                         postsMap.put("postimage", downloadUrl);
 
 
-                        PostsRef.child(current_user_id + postRandomName).updateChildren(postsMap).addOnCompleteListener(new OnCompleteListener() {
+                        PostsRef.child(selected_category).child(current_user_id + postRandomName).updateChildren(postsMap).addOnCompleteListener(new OnCompleteListener() {
                             @Override
                             public void onComplete(@NonNull Task task) {
 

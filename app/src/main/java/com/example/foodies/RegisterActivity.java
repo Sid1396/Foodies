@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -94,9 +96,12 @@ public class RegisterActivity extends AppCompatActivity {
         else
         {
             loadingBar.setTitle("Creating New Account");
-            loadingBar.setMessage("Please wait, while we are creating your new Account...");
+            loadingBar.setMessage("Please wait ");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
 
 
             mAuth.createUserWithEmailAndPassword(email, password)
@@ -108,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                             {
                                 SendUserToSetupActivity();
 
-                                Toast.makeText(RegisterActivity.this, "you are authenticated successfully...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "You are authenticated successfully...", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }
                             else

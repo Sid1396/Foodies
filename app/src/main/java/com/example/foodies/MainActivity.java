@@ -1,6 +1,7 @@
 package com.example.foodies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.stations_list);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new GridLayoutManager(this,2);
         adapter = new StationsAdaptor(this, stations);
 
         recyclerView.setLayoutManager(layoutManager);

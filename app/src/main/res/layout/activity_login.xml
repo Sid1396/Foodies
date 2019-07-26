@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@drawable/grad_bg">
+    android:background="@drawable/loginbg">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -26,13 +26,13 @@
                 android:id="@+id/tv_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="serif"
+                android:fontFamily="cursive"
+                android:textStyle="bold"
                 android:text="Foodies"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="40sp" />
 
             <LinearLayout
                 android:id="@+id/linlay1"
@@ -56,7 +56,8 @@
                         android:text="Email"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                     <EditText
                         android:id="@+id/login_email"
@@ -68,6 +69,7 @@
                         android:inputType="textEmailAddress"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
+                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
 
@@ -86,7 +88,8 @@
                         android:text="Password"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
 
                     <EditText
                         android:id="@+id/login_password"
@@ -99,6 +102,7 @@
                         android:inputType="textPassword"
                         android:paddingRight="15dp"
                         android:textColor="@color/white"
+                        android:textStyle="bold"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -119,7 +123,7 @@
                 android:paddingRight="70dp"
                 android:text="Login Now"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
 
@@ -142,9 +146,11 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:fontFamily="sans-serif"
-            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="30dp"
             android:text="not account yet? create one"
             android:textAllCaps="true"
+            android:textSize="18sp"
             android:textColor="@color/white" />
 
 

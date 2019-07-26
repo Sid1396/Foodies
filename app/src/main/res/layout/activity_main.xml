@@ -1,41 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+    <RelativeLayout
+        android:id="@+id/rellay1"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        android:background="@drawable/backgrond"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="cursive"
+            android:text="Foodies"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+
+            />
+
+        <ImageView
+            android:id="@+id/add_post_btn"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/add" />
+
+        <ImageView
+            android:id="@+id/logout_btn"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/exit" />
+
+
+    </RelativeLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stations_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/rellay1"
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 
 
-    <ImageView
-        android:id="@+id/add_post_btn"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/add"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/logout_btn"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/exit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

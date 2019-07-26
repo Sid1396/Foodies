@@ -47,6 +47,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:11.6.0'
     implementation 'com.firebaseui:firebase-ui-database:2.1.1'
     implementation 'org.codehaus.groovy:groovy-all:2.4.12'
+    implementation 'com.jcminarro:RoundKornerLayouts:0.4.0'
+
 
 
 }

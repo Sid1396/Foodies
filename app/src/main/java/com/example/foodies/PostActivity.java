@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -107,8 +109,6 @@ public class PostActivity extends AppCompatActivity {
         UpdatePostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager imm= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 
                 ValidatePostInfo();
             }
@@ -137,10 +137,14 @@ public class PostActivity extends AppCompatActivity {
             ImageUri = data.getData();
             postimage.setImageURI(ImageUri);
 
-            loadingBar.setTitle("Profile Image");
-            loadingBar.setMessage("Please wait, while we updating your profile image...");
+            loadingBar.setTitle("Uploading Your Post");
+            loadingBar.setMessage("Please wait");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
             saveImagetoFirebase();
 
         }
@@ -222,8 +226,8 @@ public class PostActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(Description))
         {
             Toast.makeText(this, "Please write something...", Toast.LENGTH_SHORT).show();
-        }else  if(selected_category.equals("Select Category")){
-            Toast.makeText(this, "Please Select Category !!", Toast.LENGTH_SHORT).show();
+        }else  if(selected_category.equals("Select Station")){
+            Toast.makeText(this, "Please Select Station !!", Toast.LENGTH_SHORT).show();
         }
         else if(ImageUri == null)
         {
@@ -232,10 +236,13 @@ public class PostActivity extends AppCompatActivity {
 
         else
         {
-            loadingBar.setTitle("Add New Post");
-            loadingBar.setMessage("Please wait, while we are updating your new post...");
+            loadingBar.setTitle("Adding Your Post");
+            loadingBar.setMessage("Please wait");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
             Calendar calFordDate = Calendar.getInstance();
             SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
             saveCurrentDate = currentDate.format(calFordDate.getTime());

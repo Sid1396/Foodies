@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -108,10 +110,13 @@ public class SetupActivity extends AppCompatActivity {
             ImageUri = data.getData();
             ProfileImage.setImageURI(ImageUri);
 
-            loadingBar.setTitle("Profile Image");
-            loadingBar.setMessage("Please wait, while we updating your profile image...");
+            loadingBar.setTitle("Uploading Profile Image");
+            loadingBar.setMessage("Please wait");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
             saveImagetoFirebase();
 
         }
@@ -161,7 +166,7 @@ public class SetupActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
 
-                    Toast.makeText(SetupActivity.this, "Profile picture Successfully Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SetupActivity.this, "Profile Picture Uploaded Successfully ", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
 
 
@@ -202,9 +207,12 @@ public class SetupActivity extends AppCompatActivity {
         else {
 
             loadingBar.setTitle("Saving Information");
-            loadingBar.setMessage("Please wait, while we are creating your new Account...");
+            loadingBar.setMessage("Please wait ");
             loadingBar.show();
             loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
 
             HashMap userMap = new HashMap();
             userMap.put("username", username);
@@ -220,7 +228,7 @@ public class SetupActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
                         SendUserToMainActivity();
-                        Toast.makeText(SetupActivity.this, "your Account is created Successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SetupActivity.this, "Account created Successfully.", Toast.LENGTH_LONG).show();
                         loadingBar.dismiss();
                     }
                     else

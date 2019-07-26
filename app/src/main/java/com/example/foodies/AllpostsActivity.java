@@ -2,6 +2,7 @@ package com.example.foodies;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,8 +49,10 @@ public class AllpostsActivity extends AppCompatActivity {
 
         SearchResultList = (RecyclerView) findViewById(R.id.staionsPostsList);
         SearchResultList.setHasFixedSize(true);
-        SearchResultList.setLayoutManager(new LinearLayoutManager(this));
+        SearchResultList.setLayoutManager(new GridLayoutManager(this,2));
         NewPostsRef=FirebaseDatabase.getInstance().getReference().child("Posts").child(stName);
+
+
 
         StaionPosts(stName);
 
@@ -65,7 +68,7 @@ public class AllpostsActivity extends AppCompatActivity {
                 = new FirebaseRecyclerAdapter<SortPosts, SearchByCategoryViewHolder>
                 (
                         SortPosts.class,
-                        R.layout.statons_layout,
+                        R.layout.all_post_layout,
                         SearchByCategoryViewHolder.class,
                         NewPostsRef
                 ){
@@ -98,8 +101,8 @@ public class AllpostsActivity extends AppCompatActivity {
         public SearchByCategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
-            postimages = (ImageView)mView.findViewById(R.id.station_picture);
-            post_description = (TextView)mView.findViewById(R.id.station_name);
+            postimages = (ImageView)mView.findViewById(R.id.image_name);
+            post_description = (TextView)mView.findViewById(R.id.description);
             PostsRef = FirebaseDatabase.getInstance().getReference().child("Posts");
             currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
@@ -108,7 +111,7 @@ public class AllpostsActivity extends AppCompatActivity {
 
 
         public void setPostimage(String postimage) {
-            ImageView image = (ImageView) mView.findViewById(R.id.station_picture);
+            ImageView image = (ImageView) mView.findViewById(R.id.image_name);
             Picasso.get().load(postimage).into(image);
 
         }
@@ -116,7 +119,7 @@ public class AllpostsActivity extends AppCompatActivity {
 
         public void setDescription(String description) {
 
-            TextView PostDiscription = (TextView) mView.findViewById(R.id.station_name);
+            TextView PostDiscription = (TextView) mView.findViewById(R.id.description);
             PostDiscription.setText(description);
 
         }

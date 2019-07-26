@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:id="@+id/station_picture"
+            android:id="@+id/image_name"
             android:scaleType="fitXY"
             android:layout_centerHorizontal="true"
             app:srcCompat="@drawable/kandivali"
@@ -24,8 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Station name"
-            android:id="@+id/station_name"
+            android:text="Description"
+            android:id="@+id/description"
             android:textStyle="bold"
             android:drawablePadding="5dp"
             android:textColor="@android:color/black"
@@ -34,18 +35,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_below="@+id/station_picture"
+            android:layout_below="@+id/image_name"
 
             />
 
     </com.jcminarro.roundkornerlayout.RoundKornerRelativeLayout>
-
-
-
-
-
-
-
-
 
 </RelativeLayout>

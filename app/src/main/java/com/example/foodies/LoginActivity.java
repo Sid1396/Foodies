@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         // rememberMe();
 
         loadingBar = new ProgressDialog(this);
+
         mAuth = FirebaseAuth.getInstance();
 
         NeedNewAccountLink.setOnClickListener(new View.OnClickListener() {
@@ -112,9 +115,12 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             loadingBar.setTitle("Login");
-            loadingBar.setMessage("Please wait, while we are allowing you to login into your Account...");
+            loadingBar.setMessage("Please wait");
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
 
 
             mAuth.signInWithEmailAndPassword(email, password)

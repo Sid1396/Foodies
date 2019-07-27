@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView logoutbtn;
     private FirebaseAuth mAuth;
 
-//bhosdyat gela job udya firyala jauya
 
 
     @Override

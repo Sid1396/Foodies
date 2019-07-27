@@ -5,12 +5,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +30,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -49,7 +55,10 @@ public class PostActivity extends AppCompatActivity {
     private  String Description;
     private Uri ImageUri;
     private ProgressDialog loadingBar;
-    private static final int Gallery_Pick = 1;
+
+    private static final int Camera_Pick = 1;
+    private static final int Gallery_Pick = 2;
+
     private FirebaseAuth mAuth;
     private Spinner railway_station;
     private ImageView postbackbtn;
@@ -98,10 +107,35 @@ public class PostActivity extends AppCompatActivity {
         postimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openGallery();
+              //  openGallery();
 
 
-            }
+
+                final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+                AlertDialog.Builder builder = new AlertDialog.Builder(PostActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo"))
+                        {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, Camera_Pick);
+                        }
+                        else if (options[item].equals("Choose from Gallery"))
+                        {
+                            openGallery();
+                        }
+                        else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+
+
+
+        }
         });
 
 
@@ -128,11 +162,36 @@ public class PostActivity extends AppCompatActivity {
         startActivityForResult(galleryIntent,Gallery_Pick);
 
     }
+
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==Gallery_Pick &&  resultCode==RESULT_OK && data!=null)
+
+
+        if(requestCode==Camera_Pick &&  resultCode==RESULT_OK )
+        {
+            Bitmap mImageUri = (Bitmap) data.getExtras().get("data");
+            postimage.setImageBitmap(mImageUri);
+            loadingBar.setTitle("Uploading Your Post");
+            loadingBar.setMessage("Please wait");
+            loadingBar.show();
+            loadingBar.setCanceledOnTouchOutside(true);
+            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
+            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+            saveImagetoFirebase();
+        }
+
+
+
+
+        else if (requestCode==Gallery_Pick &&  resultCode==RESULT_OK && data!=null)
         {
             ImageUri = data.getData();
             postimage.setImageURI(ImageUri);
@@ -163,6 +222,12 @@ public class PostActivity extends AppCompatActivity {
 
         postRandomName = saveCurrentDate + saveCurrentTime;
         final StorageReference filePath = PostsImagesRefrence.child("Post Images").child(current_user_id + postRandomName + ".jpg");
+
+
+
+
+
+
         filePath.putFile(ImageUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {

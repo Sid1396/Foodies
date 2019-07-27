@@ -70,6 +70,7 @@ public class PostActivity extends AppCompatActivity {
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
 
 //kela bagh
+    // hot naay
 
 
     @Override

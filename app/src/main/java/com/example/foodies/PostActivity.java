@@ -3,7 +3,9 @@ package com.example.foodies;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,11 +13,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -43,9 +49,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -55,11 +68,14 @@ public class PostActivity extends AppCompatActivity {
     private  String Description;
     private Uri ImageUri;
     private ProgressDialog loadingBar;
-
+    private String dir;
     private static final int Camera_Pick = 1;
+    private String pathToFile;
     private static final int Gallery_Pick = 2;
-
+    private Uri fileUri = null;
     private FirebaseAuth mAuth;
+    private String pictureFilePath;
+    private String deviceIdentifier;
     private Spinner railway_station;
     private ImageView postbackbtn;
     private long countPosts = 0;
@@ -69,14 +85,17 @@ public class PostActivity extends AppCompatActivity {
     public String finalTime;
     private String saveCurrentDate, saveCurrentTime, postRandomName, downloadUrl, current_user_id;
 
-//kela bagh
-    // hot naay
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        if(Build.VERSION.SDK_INT >= 23){
+            requestPermissions(new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE},2);
+        }
 
 
         Calendar calFordDate = Calendar.getInstance();
@@ -108,7 +127,6 @@ public class PostActivity extends AppCompatActivity {
         postimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  openGallery();
 
 
 
@@ -120,8 +138,9 @@ public class PostActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int item) {
                         if (options[item].equals("Take Photo"))
                         {
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent, Camera_Pick);
+
+                            dispatchPictureTakerAction();
+
                         }
                         else if (options[item].equals("Choose from Gallery"))
                         {
@@ -154,6 +173,45 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    private void dispatchPictureTakerAction() {
+
+        Intent takePic = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePic.resolveActivity(getPackageManager()) != null )
+        {
+            File photofile = null ;
+            photofile = createPhotoFile();
+
+
+            if (photofile != null)
+            {
+                pathToFile = photofile.getAbsolutePath();
+                ImageUri= FileProvider.getUriForFile(PostActivity.this,"com.example.foodies.fileprovider",photofile);
+                takePic.putExtra(MediaStore.EXTRA_OUTPUT,ImageUri);
+                startActivityForResult(takePic,Camera_Pick);
+
+            }
+
+        }
+
+
+
+    }
+
+    private File createPhotoFile() {
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+       File image = null;
+        try {
+            image = File.createTempFile(name,".jpg",storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return image;
+
+    }
+
     private void openGallery()
     {
 
@@ -165,31 +223,31 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
 
+        if (requestCode == Camera_Pick && resultCode == RESULT_OK) {
 
-        if(requestCode==Camera_Pick &&  resultCode==RESULT_OK )
-        {
-            Bitmap mImageUri = (Bitmap) data.getExtras().get("data");
-            postimage.setImageBitmap(mImageUri);
-            loadingBar.setTitle("Uploading Your Post");
-            loadingBar.setMessage("Please wait");
-            loadingBar.show();
-            loadingBar.setCanceledOnTouchOutside(true);
-            ProgressBar progressbar=(ProgressBar)loadingBar.findViewById(android.R.id.progress);
-            progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+            File imgFile = new  File(pathToFile);
+            if(imgFile.exists())            {
+                postimage.setImageURI(Uri.fromFile(imgFile));
+            }
 
 
-            saveImagetoFirebase();
+        loadingBar.setTitle("Uploading Your Post");
+        loadingBar.setMessage("Please wait");
+        loadingBar.show();
+        loadingBar.setCanceledOnTouchOutside(true);
+        ProgressBar progressbar = (ProgressBar) loadingBar.findViewById(android.R.id.progress);
+        progressbar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#C60000"), android.graphics.PorterDuff.Mode.SRC_IN);
+
+
+        saveImagetoFirebase();
+
+
         }
-
-
 
 
         else if (requestCode==Gallery_Pick &&  resultCode==RESULT_OK && data!=null)

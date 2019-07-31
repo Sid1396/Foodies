@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         stations.add(new Stations("Bandra", R.drawable.bandra));
         stations.add(new Stations("Andheri", R.drawable.andheri));
         stations.add(new Stations("Goregoan", R.drawable.goregoan));
-        stations.add(new Stations("Kandiwali", R.drawable.kandivali));
+        stations.add(new Stations("Kandivali", R.drawable.kandivali));
         stations.add(new Stations("Borivali", R.drawable.borivali));
         stations.add(new Stations("Bhaynder", R.drawable.bhaynder));
         stations.add(new Stations("Vasai Road", R.drawable.vasairoad));
